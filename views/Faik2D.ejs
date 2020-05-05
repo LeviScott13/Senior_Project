@@ -11,7 +11,7 @@
             margin: 0;
         }
         table{
-            padding-top: 50px;
+            padding-top: 25px;
         }
         input{
             width: 30%;
@@ -77,46 +77,27 @@
             left: 651px;
         }
     </style>
-
+        
     <body>
-        <div style="background-color: black; border-bottom: 1px solid white;" class="bgimg">
-            <img id=logo src= "Images/logo.jpeg">
-        </div>
-        <div style="background-color: white;">
-            <marquee 
-            style="color:white; border-top:1px solid white; height: 36px;" 
-            direction = "left"
-            behavior = "scroll"
-            bgcolor = "black"
-            >
-            <font size=6> Get started by designing your t-shirt!</font>
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            <font size=6> Choose from a wide variety of colors!</font>
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            <font size=6> Upload images onto your t-shirt!</font>
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            <font size=6> Customize the way you like!</font>
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            <font size=6> Choose to validate your t-shirt against our License Plate Detection or Facial Recognition Software!</font>
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            <font size=6> Your privacy matters!</font>
-            </marquee>
-        </div>
-        </br></br>
         <center><div id=container>
             <table align=center cellspacing="0">
                 <tr>
-                    <td style="border: 3px solid white" bgcolor=black colspan="2">
-                        <img style="visibility: visible;" id=validate src="Images/blank.png">
+                    <td bgcolor=black colspan="2">
+                        <% if(validateCount == 0){ %> 
+                            <img style="visibility: visible;" id=validate src="Images/failed.png">
+                        <% } %>
+                        <% if(validateCount > 0){ %>
+                            <img style="visibility: visible;" id=validate src="Images/approved.png">
+                        <% } %>
                     </td>
                 </tr>
                 <tr>
-                    <td id=changeColor style="border-left: 2px solid white; border-right: 2px solid white;" bgcolor="black">
+                    <td id=changeColor bgcolor="black">
                         <div id="addImages">
                             <img style="display: block" id=default src="Images/shirt.png">
                         </div>
                     </td>
-                    <td bgcolor="black" style="border-right: 2px solid white; padding-right: 40px; padding-left: 40px">
+                    <td bgcolor="black" style="padding-right: 40px; padding-left: 40px">
                         
                         <center><font size="8"color=white>Designer</font></br></br></br>
                         <font size="5"color=white>Upload Image: </font></br></br>
@@ -137,20 +118,21 @@
                     </td>
                 </tr>
                 <tr>
-                    <td bgcolor="black" style="border: 2px solid white; padding-bottom: 20px; padding-top: 20px" colspan="2">
+                    <td bgcolor="black" style="padding-bottom: 20px; padding-top: 20px" colspan="2">
                         <center>
-                            <font size="4" color=white> Images detected: <%= validateCount %></font>enspensp
+                            <form method="POST" action="/">
                             <font size="5"color=white>Choose AI Software:</font>ensp
-                            <select style="padding: 6px;" id="chooseSoftwareAI">
-                                <option value="LP">License Plate Detection</option>
-                                <option value="FaceRecog">Facial Recognition</option>
+                            <select name="selection" style="padding: 6px;" id="chooseSoftwareAI">
+                                <option value="LP" name="lp">License Plate Detection</option>
+                                <option value="FaceRecog" name="Face">Facial Recognition</option>
                             </select>ensp
-                            <button type="button" class=button style="padding: 6px;" onclick="validation()">Validate</button>
+                                <button type="submit" class="button" style="padding: 6px;" >Validate</button>
+                            </form>
                         </center>
                     </td>
                 </tr>
-            </table></br></br>
-        </div></center></br></br>
+            </table></br>
+        </div></center>
     </body>
     <script type="text/javascript">
 
@@ -183,11 +165,11 @@
 
                 newImg.setAttribute('id', 'custom' + count.toString());
                 newImg.setAttribute('class', 'positionImg');
-                newImg.setAttribute('style', 'visibility: visible');
+                newImg.setAttribute('style', 'visibility: visible;');
                 newImg.setAttribute('height', '50');
                 newImg.setAttribute('width', '100');
                 newImg.setAttribute('onclick', 'rotateImage()');
-                newImg.setAttribute('ondragstart', 'return false;');
+                newImg.setAttribute('ondragstart', 'return false;')
                 
                 addImage.appendChild(newImg);
                 
@@ -296,43 +278,13 @@
 //*********************************
 //Code: Decreasing Height to Image
 //*********************************
-function decreaseHeight(){
+    function decreaseHeight(){  
             var image = document.getElementById("custom" + count.toString());
             var addHeightToImage = document.getElementById("custom" + count.toString()).height;
             addHeightToImage -= 5;
             image.height = addHeightToImage;
             addHeightToImage.width = 'height' + image.height.toString();
 
-        }
-//********************************************
-//Code: Validating Image against AI Software
-//********************************************
-        function validation(){
-            
-            var changeBanner = document.getElementById("validate");
-            var validate = '<%- JSON.parse(validatedImage) %>'; 
-            var count = '<%- JSON.parse(validateCount) %>'; 
-            var boolValue = validate.toString().toLocaleLowerCase() == "true" ? true : false;
-
-            var dropDownList = document.getElementById("chooseSoftwareAI");
-            var selectedValue = dropDownList.options[dropDownList.selectedIndex].value;
-            
-            if(selectedValue == "LP"){
-                if(boolValue == false){
-                    changeBanner.src = "Images/failed.png";
-                }
-                else if(boolValue == true){
-                    changeBanner.src = "Images/approved.png";
-                }
-            }
-            else if(selectedValue == "FaceRecog"){
-                if(boolValue == false){
-                    changeBanner.src = "Images/failed.png";
-                }
-                else if(boolValue == true){
-                    changeBanner.src = "Images/approved.png";
-                }
-            }
         }
     </script>
 </html>

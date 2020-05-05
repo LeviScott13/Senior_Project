@@ -1,43 +1,30 @@
 import cv2
-import imutils
-import pyautogui
+import os
 
+f = open('validation.txt', 'w')
 
-def check_for_plates():
-    f = open('validation.txt', 'w')
+CASCADE_PATH = 'data/cascade.xml'
+RESIZE_HEIGHT = 600
 
-    CASCADE_PATH = 'data/cascade.xml'
-    RESIZE_HEIGHT = 600
+# Initiate cascade classifier.
+plate_cascade = cv2.CascadeClassifier(CASCADE_PATH)
 
-    my_screenshot = pyautogui.screenshot()
-    my_screenshot.save(r'C:\Users\Nick\PycharmProjects\FacialRecognition\screentest.png')
+# Get image from given path
+img = cv2.imread('screen-capture.png')
 
-    # Initiate cascade classifier.
-    plate_cascade = cv2.CascadeClassifier(CASCADE_PATH)
+# Filter image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# Detect plates in img
+plates = plate_cascade.detectMultiScale(gray, 5, 0)
 
-    # Get image from given path
-    img = cv2.imread('screentest.png')
+count = 0
 
-    # Resize image
-    #img = imutils.resize(img, height=RESIZE_HEIGHT)
+for (x, y, w, h) in plates:
+    count = count + 1
 
-    # Filter image to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+if count > 0:
+    f.write(str(count))
+else:
+    f.write(str(count))
 
-    # Detect plates in img
-    plates = plate_cascade.detectMultiScale(gray, 5, 100)
-
-    count = 0
-
-    for (x, y, w, h) in plates:
-        count = count + 1
-
-    if count > 0:
-        f.write('True\n')
-        f.write(str(count))
-    else:
-        f.write('False\n')
-        f.write(str(count))
-
-
-check_for_plates()
+os.remove('screen-capture.png')

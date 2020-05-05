@@ -1,30 +1,22 @@
 import cv2
-import pyautogui
+import os
 
+f = open('validation.txt', 'w')
 
-def check_for_faces():
-    f = open('validation.txt', 'w')
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
 
-    my_screenshot = pyautogui.screenshot()
-    my_screenshot.save(r'C:\Users\Nick\PycharmProjects\FacialRecognition\screentest.png')
+img = cv2.imread('screen-capture.png')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+faces = face_cascade.detectMultiScale(gray, 1.1, 4)
 
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+count = 0
 
-    img = cv2.imread('screentest.png')
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+for (x, y, h, w) in faces:
+    count += 1
 
-    count = 0
+if count > 0:
+    f.write(str(count))
+else:
+    f.write(str(count))
 
-    for (x, y, h, w) in faces:
-        count += 1
-
-    if count > 0:
-        f.write('True\n')
-        f.write(str(count))
-    else:
-        f.write('False\n')
-        f.write(str(count))
-
-
-check_for_faces()
+os.remove('screen-capture.png')
