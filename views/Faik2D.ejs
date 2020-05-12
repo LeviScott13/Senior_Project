@@ -83,10 +83,13 @@
             <table align=center cellspacing="0">
                 <tr>
                     <td bgcolor=black colspan="2">
-                        <% if(validateCount == 0){ %> 
+                        <% if(validation == 'null'){ %> 
+                            <img style="visibility: visible;" id=validate src="Images/blank.png">
+                        <% } %>
+                        <% if(validation == 'false'){ %> 
                             <img style="visibility: visible;" id=validate src="Images/failed.png">
                         <% } %>
-                        <% if(validateCount > 0){ %>
+                        <% if(validation == 'true'){ %>
                             <img style="visibility: visible;" id=validate src="Images/approved.png">
                         <% } %>
                     </td>

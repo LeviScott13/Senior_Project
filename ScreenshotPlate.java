@@ -23,8 +23,11 @@ public class ScreenshotPlate {
  
             Rectangle rectangle = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
             BufferedImage bufferedImage = robot.createScreenCapture(rectangle);
+            BufferedImage bufferedImage2 = robot.createScreenCapture(rectangle); 
             File file = new File("screen-capture.png");
-            boolean status = ImageIO.write(cropImage(bufferedImage, 423,180,336,490), "png", file);
+            File file2 = new File("design.png");
+            boolean status = ImageIO.write(cropImage(bufferedImage, 490,245,250,445), "png", file);
+            boolean status2 = ImageIO.write(bufferedImage2, "png", file2);
             System.out.println("Screen Captured ? " + status + " File Path:- " + file.getAbsolutePath());
             Process p = Runtime.getRuntime().exec("python license_plate.py");
             

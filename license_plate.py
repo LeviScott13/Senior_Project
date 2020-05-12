@@ -20,11 +20,11 @@ plates = plate_cascade.detectMultiScale(gray, 5, 0)
 count = 0
 
 for (x, y, w, h) in plates:
-    count = count + 1
+    count += 1
 
 if count > 0:
-    f.write(str(count))
+    f.write('true')
 else:
-    f.write(str(count))
+    f.write('false')
 
 os.remove('screen-capture.png')

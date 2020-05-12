@@ -10,17 +10,16 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 
-var validateCount;
+var validation;
 
 app.post("/", function(req,res){
     var value = req.body.selection;
-    value2 = value.toString();
     let {PythonShell} = require('python-shell')
     let pyshell = new PythonShell('exe_plates.py');
-
+    console.log(value);
     if(value == "LP"){
+        console.log(value);
         pyshell.on('message', function (message) {
-            // received a message sent from the Python script (a simple "print" statement)
             console.log(message);
         });
         pyshell.end(function () {
@@ -28,10 +27,26 @@ app.post("/", function(req,res){
         });
         function update(){
             array = fs.readFileSync('validation.txt').toString().split("\n");
-            validateCount = array[0];
-            res.render('Faik2D', {validateCount: validateCount});
+            validation = array[0];
+            res.render('Faik2D', {validation: validation});
         }
-        setTimeout(update, 3000);
+        setTimeout(update, 5000);
+    }
+    else{
+        console.log(value);
+        let pyshell2 = new PythonShell('exe_faces.py');
+        pyshell2.on('message', function (message) {
+            console.log(message);
+        });
+        pyshell2.end(function () {
+            console.log('finished');
+        });
+        function update2(){
+            array = fs.readFileSync('validation.txt').toString().split("\n");
+            validation = array[0];
+            res.render('Faik2D', {validation: validation});
+        }
+        setTimeout(update2, 5000);
     }
 });
 
@@ -42,8 +57,8 @@ app.get("/", function(req,res){
 app.get("/Faik2D", function(req,res){
   
     array = fs.readFileSync('validation.txt').toString().split("\n");
-    validateCount = array[0];
-    res.render('Faik2D', {validateCount: validateCount});
+    validation = array[0];
+    res.render('Faik2D', {validation: validation});
 });
 app.get("/FaikTutorial", function(req,res){
   

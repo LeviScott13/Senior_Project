@@ -15,8 +15,8 @@ for (x, y, h, w) in faces:
     count += 1
 
 if count > 0:
-    f.write(str(count))
+    f.write('true')
 else:
-    f.write(str(count))
+    f.write('false')
 
 os.remove('screen-capture.png')
