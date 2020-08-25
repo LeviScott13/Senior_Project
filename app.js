@@ -64,6 +64,4 @@ app.get("/FaikTutorial", function(req,res){
   
     res.render('FaikTutorial');
 });
-app.listen(port, () =>{
-    console.log("Server is started!!");
-});
+app.listen(process.env.PORT || 5000);
